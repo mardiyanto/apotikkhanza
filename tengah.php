@@ -2,6 +2,108 @@
 <?php
 ///////////////////////////lihat/////////////////////////////////////////////
 if($_GET['aksi']=='index'){
+    $tahun_sekarang = date('Y');
+    $bulan_sekarang = date('m');
+    $sql1 = "SELECT  SUM(detail_pengajuan_barang_medis.total) AS total_per_bulan
+            FROM detail_pengajuan_barang_medis
+            INNER JOIN pengajuan_barang_medis 
+            ON detail_pengajuan_barang_medis.no_pengajuan = pengajuan_barang_medis.no_pengajuan
+            WHERE YEAR(pengajuan_barang_medis.tanggal) = $tahun_sekarang AND MONTH(pengajuan_barang_medis.tanggal) = $bulan_sekarang
+            AND pengajuan_barang_medis.status = 'Disetujui'
+            GROUP BY MONTH(pengajuan_barang_medis.tanggal)";
+    
+    $result1 = mysqli_query($koneksi, $sql1);
+    $tx = mysqli_fetch_assoc($result1);
+
+    $sql2 = "SELECT  COUNT(no_pengajuan) AS hasil
+            FROM pengajuan_barang_medis  WHERE YEAR(tanggal) = $tahun_sekarang AND MONTH(tanggal) = $bulan_sekarang
+            AND status = 'Proses Pengajuan'
+            GROUP BY MONTH(tanggal)";
+    
+    $result2 = mysqli_query($koneksi, $sql2);
+    $tj = mysqli_fetch_assoc($result2);
+    $nama_bulan = date("F", mktime(0, 0, 0, $bulan_sekarang, 1));
+      // 2. Query data total per bulan dari tabel pemesanan dengan status Belum Dibayar
+      $sql3 = "SELECT SUM(tagihan) AS total_per_bulan, COUNT(no_faktur) AS hasil
+      FROM pemesanan
+      WHERE (status = 'Belum Dibayar' OR status = 'Belum Lunas') AND YEAR(tgl_faktur) = '$tahun_sekarang' AND MONTH(tgl_faktur) = '$bulan_sekarang'
+      GROUP BY MONTH(tgl_faktur)";
+      $result3 = mysqli_query($koneksi, $sql3);
+      $tr = mysqli_fetch_assoc($result3); 
+      $hasil_bayar=$tr['total_per_bulan'];
+      // 3. Query data total per bulan dari tabel pemesanan dengan status Belum Dibayar
+      $sql4 = "SELECT SUM(bayar_pemesanan.besar_bayar) AS total_bayar FROM pemesanan,bayar_pemesanan WHERE 
+      pemesanan.no_faktur = bayar_pemesanan.no_faktur AND YEAR(pemesanan.tgl_faktur) = '$tahun_sekarang' AND MONTH(pemesanan.tgl_faktur) = '$bulan_sekarang'
+      GROUP BY bayar_pemesanan.no_faktur";
+      $result4 = mysqli_query($koneksi, $sql4);
+      $ts = mysqli_fetch_assoc($result4);   
+      $besar_bayar=$ts['total_bayar'];
+      $hasil_bayar1=$besar_bayar-$hasil_bayar;
+ echo"  <div class='row'>
+ <div class='col-md-3 col-sm-6 col-xs-12'>
+   <div class='info-box'>
+     <span class='info-box-icon bg-aqua'><i class='fa fa-money'></i></span>
+
+     <div class='info-box-content'> 
+       <span class='info-box-text'>Pengajuan $nama_bulan $tahun_sekarang</span>
+       <span class='info-box-number'>"; echo "Rp." . number_format($tx['total_per_bulan'], 0, ',', '.'); echo"</small></span>
+       <a href='proses.php?aksi=pengajuanobat' type='button' class='btn btn-success btn-sm'>Detail</a>
+     </div>
+     <!-- /.info-box-content -->
+   </div>
+   <!-- /.info-box -->
+ </div>
+ <!-- /.col -->
+ <div class='col-md-3 col-sm-6 col-xs-12'>
+   <div class='info-box'>
+     <span class='info-box-icon bg-red'><i class='fa  fa-credit-card'></i></span>
+
+     <div class='info-box-content'>
+       <span class='info-box-text'>Penerimaan $nama_bulan $tahun_sekarang</span>
+       <span class='info-box-number'>"; echo "Rp." . number_format($hasil_bayar, 0, ',', '.'); echo"</span>
+       
+     </div>
+     <!-- /.info-box-content -->
+   </div>
+   <!-- /.info-box -->
+ </div>
+ <!-- /.col -->
+
+ <!-- fix for small devices only -->
+ <div class='clearfix visible-sm-block'></div>
+
+ <div class='col-md-3 col-sm-6 col-xs-12'>
+   <div class='info-box'>
+     <span class='info-box-icon bg-green'><i class='fa fa-suitcase'></i></span>
+
+     <div class='info-box-content'>
+       <span class='info-box-text'>Pengajuan Baru $nama_bulan $tahun_sekarang</span>
+       <span class='info-box-number'>$tj[hasil]</span>
+       <a href='proses.php?aksi=pengajuanobat' type='button' class='btn btn-success btn-sm'>Detail</a>
+     </div>
+     <!-- /.info-box-content -->
+   </div>
+   <!-- /.info-box -->
+ </div>
+ <!-- /.col -->
+ <div class='col-md-3 col-sm-6 col-xs-12'>
+   <div class='info-box'>
+     <span class='info-box-icon bg-yellow'><i class='fa fa-shopping-cart'></i></span>
+
+     <div class='info-box-content'>
+       <span class='info-box-text'>Penerimaan Obat $nama_bulan $tahun_sekarang</span>
+       <span class='info-box-number'>$tr[hasil]</span>
+     </div>
+     <!-- /.info-box-content -->
+   </div>
+   <!-- /.info-box -->
+ </div>
+ <!-- /.col -->
+</div>
+<!-- /.row -->"; 
+include "grafik.php";
+}
+elseif($_GET['aksi']=='pengajuanobat'){
     echo"<div class='box box-default'>
     <div class='box-header with-border'>
     <h3 class='box-title'>Cari Data</h3>
@@ -198,7 +300,7 @@ if($_GET['aksi']=='index'){
                         <button class='btn btn-danger btn-lg'> "; echo "Subtotal : Rp." . number_format($subtotal , 0, ',', '.');  echo" </button>
                         </div>";
 }
-elseif($_GET['aksi']=='ikon'){
+elseif($_GET['aksi']=='grafik'){
 include "grafik.php";
 }
 elseif($_GET['aksi']=='pemesanan'){
@@ -615,6 +717,7 @@ echo"</table>
     </div>
     </div><!-- /.box --> ";
 }
+
 elseif($_GET['aksi']=='detailpemesanan'){
     $tebaru = mysqli_query($koneksi, "SELECT * FROM pengajuan_barang_medis, pegawai 
     WHERE pengajuan_barang_medis.nip = pegawai.nik  AND  pengajuan_barang_medis.no_pengajuan='$_GET[no_pengajuan]'");
@@ -632,7 +735,7 @@ elseif($_GET['aksi']=='detailpemesanan'){
         <div class='box-body box-profile'>
           <h3 class='profile-username text-center'>$t[nama]</h3>
           <p class='text-muted text-center'>$t[no_pengajuan]</p>
-          <a href='proses.php?aksi=pemesanan' class='btn btn-primary'>Kembali</a> <a href='proses.php?aksi=pemesanan' class='btn btn-primary'>$t[status]</a> 
+          <a href='proses.php?aksi=pengajuanobat' class='btn btn-primary'>Kembali</a> <a href='proses.php?aksi=pengajuanobat' class='btn btn-primary'>$t[status]</a> 
         </div><!-- /.box-body -->
       </div><!-- /.box -->
 
