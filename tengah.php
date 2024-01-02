@@ -135,7 +135,7 @@ if($_GET['aksi']=='index'){
                                           <strong><i class='fa fa-book margin-r-5'></i>$no . $w[nama_brng] ($w[kode_satbesar])</strong>
                                           <div class='tablediv'>
                                     <div class='tablediv-row header'>
-                                        <div class='tablediv-cell'>Jumlah = $w[jumlah]</div>
+                                        <div class='tablediv-cell'>Jumlah = $w[jumlah2]</div>
                                     </div>
                                    <div class='tablediv-row header'>
                                    <div class='tablediv-cell'>Harga ="; echo "Rp." . number_format($w['h_pengajuan'], 0, ',', '.'); echo"</div>
@@ -199,7 +199,7 @@ if($_GET['aksi']=='index'){
                         </div>";
 }
 elseif($_GET['aksi']=='ikon'){
-include "../ikon.php";
+include "grafik.php";
 }
 elseif($_GET['aksi']=='pemesanan'){
     echo"

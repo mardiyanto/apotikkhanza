@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafik dengan Chart.js</title>
+    <link rel="stylesheet" href="sys/bootstrap/dist/css/AdminLTE.min.css">
+	  <link rel="stylesheet" href="sys/bootstrap/bootstrap/css/bootstrap.min.css">
+      <link rel="stylesheet" href="sys/bootstrap/font/css/font-awesome.min.css">
+	  <script src="sys/bootstrap/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+	  <script src="sys/bootstrap/bootstrap/js/bootstrap.min.js"></script>
+	   <script src="sys/bootstrap/dist/js/app.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="sys/bootstrap/dist/js/demo.js"></script>
+    <script src="chart.js"></script>
+</head>
+<body>
+    <div class='box box-default'>
+        <div class='box-header with-border'>
+        <h3 class='box-title'>Cari Data</h3>
+        <div class='box-tools pull-right'>
+            <button class='btn btn-box-tool' data-widget='collapse'><i class='fa fa-minus'></i></button>
+            <button class='btn btn-box-tool' data-widget='remove'><i class='fa fa-remove'></i></button>
+        </div>
+        </div><!-- /.box-header -->
+        <div class='box-body'>
+        
+        <div class='row'>
+            <div class='col-md-6'>
+                <div style="width: 600px; height: 400px;">
+                    <canvas id="barChart1"></canvas>
+                </div>
+            </div><!-- /.col -->
+    
+            <div class='col-md-6'>
+                <div style="width: 600px; height: 400px;">
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div><!-- /.col -->
+
+            <div class='col-md-6'>
+                <div style='width: 600px; height: 400px;'>
+                    <canvas id="barChart2"></canvas>
+                </div>
+            </div><!-- /.col -->
+            
+            <div class='col-md-6'>
+                <div style="width: 600px; height: 400px;">
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div><!-- /.col -->
+     
+        </div><!-- /.row -->
+     
+        </div><!-- /.box-body -->
+    
+        </div><!-- /.box --> 
+
+	
+    <script>
+        // Data untuk grafik bar pertama
+        var barData1 = {
+            labels: ['A', 'B', 'C', 'D', 'E'],
+            datasets: [{
+                label: 'Grafik 1',
+                data: [12, 19, 3, 5, 2],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255,99,132,1)',
+                borderWidth: 1
+            }]
+        };
+
+        // Data untuk grafik bar kedua
+        var barData2 = {
+            labels: ['X', 'Y', 'Z', 'W', 'V'],
+            datasets: [{
+                label: 'Grafik 2',
+                data: [10, 15, 7, 3, 9],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        // Data untuk grafik line
+        var lineData = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+            datasets: [{
+                label: 'Grafik Line',
+                data: [10, 20, 15, 25, 18],
+                fill: false,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2
+            }]
+        };
+
+        // Mendapatkan konteks canvas untuk grafik bar pertama
+        var barCtx1 = document.getElementById('barChart1').getContext('2d');
+        var barChart1 = new Chart(barCtx1, {
+            type: 'bar',
+            data: barData1,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Mendapatkan konteks canvas untuk grafik bar kedua
+        var barCtx2 = document.getElementById('barChart2').getContext('2d');
+        var barChart2 = new Chart(barCtx2, {
+            type: 'bar',
+            data: barData2,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Mendapatkan konteks canvas untuk grafik line
+        var lineCtx = document.getElementById('lineChart').getContext('2d');
+        var lineChart = new Chart(lineCtx, {
+            type: 'line',
+            data: lineData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+		// Data untuk grafik pie chart
+        var pieData = {
+            labels: ['A', 'B', 'C', 'D'],
+            datasets: [{
+                data: [30, 20, 25, 25],
+                backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)', 'rgba(255, 206, 86, 0.5)', 'rgba(75, 192, 192, 0.5)'],
+                borderColor: ['rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)'],
+                borderWidth: 1
+            }]
+        };
+
+        // Mendapatkan konteks canvas untuk grafik pie chart
+        var pieCtx = document.getElementById('pieChart').getContext('2d');
+        var pieChart = new Chart(pieCtx, {
+            type: 'pie',
+            data: pieData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
