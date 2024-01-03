@@ -17,7 +17,7 @@ if($_GET['aksi']=='index'){
 
     $sql2 = "SELECT  COUNT(no_pengajuan) AS hasil
             FROM pengajuan_barang_medis  WHERE YEAR(tanggal) = $tahun_sekarang AND MONTH(tanggal) = $bulan_sekarang
-            AND status = 'Proses Pengajuan'
+            AND status = 'Pengajuan'
             GROUP BY MONTH(tanggal)";
     
     $result2 = mysqli_query($koneksi, $sql2);
@@ -189,6 +189,7 @@ elseif($_GET['aksi']=='pengajuanobat'){
                             </div>
                             
                             <div class='panel-body'>
+                               <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=pengajuan'>Pengajuan</a>
                                <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=Proses Pengajuan'>Proses Pengajuan</a>
                                <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=Disetujui'>Di Setujui</a>
                                <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=Ditolak' >Di Tolak</a> <br> <br>
@@ -215,7 +216,7 @@ elseif($_GET['aksi']=='pengajuanobat'){
                         ";
                         $no=0;
                     $tebaru=mysqli_query($koneksi," SELECT * FROM pengajuan_barang_medis,pegawai 
-                    WHERE pengajuan_barang_medis.nip=pegawai.nik and pengajuan_barang_medis.status='Proses Pengajuan'
+                    WHERE pengajuan_barang_medis.nip=pegawai.nik and pengajuan_barang_medis.status='Pengajuan'
                     ORDER BY pengajuan_barang_medis.no_pengajuan DESC ");
                     while ($t=mysqli_fetch_array($tebaru)){          
                     $no++;
@@ -249,7 +250,7 @@ elseif($_GET['aksi']=='pengajuanobat'){
                                           <p class='text-muted text-center'>$t[keterangan]</p>
                                           <button type='button' class='btn btn-primary' data-dismiss='modal'>Close</button>
                                           <button type='button' class='btn btn-primary' data-dismiss='modal'>$t[status]</button>
-                                          <a class='btn btn-info' href='proses.php?aksi=detailpemesanan&no_pengajuan=$t[no_pengajuan]' target='_blank'>Total Harga</a>
+                                          <a class='btn btn-info' href='proses.php?aksi=editdetailpemesanan&no_pengajuan=$t[no_pengajuan]'>Verifikasi</a>
                                         </div><!-- /.box-body -->
                                       </div><!-- /.box -->
                                 
@@ -644,6 +645,7 @@ elseif($_GET['aksi']=='prosespemesanan'){
     
     <div class='row'>
     <div class='panel-body'>
+    <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=pengajuan'>Pengajuan</a>
     <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=Proses Pengajuan'>Proses Pengajuan</a>
     <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=Disetujui'>Di Setujui</a>
     <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=Ditolak' >Di Tolak</a> <br> <br>
@@ -853,7 +855,8 @@ elseif($_GET['aksi']=='detailpemesanan'){
          echo" 
           <hr>
           
-        </div><!-- /.box-body -->";
+        </div><!-- /.box-body -->
+        ";
         }
         
         echo"
@@ -867,21 +870,148 @@ elseif($_GET['aksi']=='detailpemesanan'){
   </div><!-- /.row -->
 ";    
 }
-elseif ($_GET['aksi'] == 'caripengajuan') {
-    // Tampilkan Form untuk Pencarian
-    echo '
-        <form method="get" action="proses.php?aksi=tampildata"> 
-            <label for="startDate">Tanggal Awal:</label>
-            <input type="date" id="startDate" name="startDate">
+//EDIT DETAIL PENGAJUAN OBAT OLEH APOKTIK
+elseif ($_GET['aksi'] == 'editdetailpemesanan') {
+  $tebaru = mysqli_query($koneksi, "SELECT * FROM pengajuan_barang_medis, pegawai 
+  WHERE pengajuan_barang_medis.nip = pegawai.nik  AND  pengajuan_barang_medis.no_pengajuan='$_GET[no_pengajuan]'");
+  $t=mysqli_fetch_array($tebaru);
+  $sub = mysqli_query($koneksi, "SELECT * FROM detail_pengajuan_barang_medis, pengajuan_barang_medis, databarang  
+                                                      WHERE detail_pengajuan_barang_medis.no_pengajuan = pengajuan_barang_medis.no_pengajuan
+                                                      AND detail_pengajuan_barang_medis.kode_brng = databarang.kode_brng 
+                                                      AND detail_pengajuan_barang_medis.no_pengajuan = '$_GET[no_pengajuan]'");
 
-            <label for="endDate">Tanggal Akhir:</label>
-            <input type="date" id="endDate" name="endDate">
+  echo" <div class='row'>
+  <div class='col-md-12'>
 
-            <input type="submit" name="submit" value="Tampilkan Data">
-            <input type="hidden" name="aksi" value="tampildata">
-        </form>
-    ';
-} elseif ($_GET['aksi'] == 'tampildata') {
+    <!-- Profile Image -->
+    <div class='box box-primary'>
+      <div class='box-body box-profile'>
+        <h3 class='profile-username text-center'>$t[nama]</h3>
+        <p class='text-muted text-center'>$t[no_pengajuan]</p>
+        <a href='proses.php?aksi=pengajuanobat' class='btn btn-primary'>Kembali</a>
+       <a href='edit.php?aksi=setujuipengajuan&no_pengajuan=$t[no_pengajuan]' onclick=\"return confirm ('Apakah yakin ingin Mengjukan Pengadaan obat Ke bagian Keuangan dengan nomor $t[no_pengajuan] ?')\" class='btn btn-primary'>$t[status]</a> 
+      </div><!-- /.box-body -->
+    </div><!-- /.box -->
+
+    <!-- About Me Box -->
+    <div class='box box-primary'>
+      <div class='box-header with-border'>
+        <h3 class='box-title'>Detail Pengajuan Obat</h3>
+      </div><!-- /.box-header -->";
+      $no=0;
+      while ($w = mysqli_fetch_array($sub)) {
+          $no++;
+          $tt       = $tt + $w['total']; 
+          echo" <div class='box-body'>
+          <strong><i class='fa fa-book margin-r-5'></i>$no . $w[nama_brng] ($w[kode_satbesar]) 
+          <!-- <a href='proses.php?aksi=proseseditpengajuan&kode_brng=$w[kode_brng]&no_pengajuan=$w[no_pengajuan]' class='btn btn-info btn-sm'>edit</a> -->
+         
+          <!-- Button trigger modal -->
+          <button type='button' class='btn btn-info btn-sm' data-toggle='modal' data-target='#$w[kode_brng]$w[no_pengajuan]'>edit</button>
+          <a href='#' class='btn btn-danger btn-sm' >hapus</a>
+          </strong>
+          
+       
+          <div class='tablediv'>
+    <div class='tablediv-row header'>
+        <div class='tablediv-cell'>Jumlah Satuan Besar = $w[jumlah]</div>
+    </div>
+    <div class='tablediv-row header'>
+    <div class='tablediv-cell'>Jumlah Satuan Kecil= $w[jumlah2]</div>
+   </div>
+   <div class='tablediv-row header'>
+   <div class='tablediv-cell'>Harga ="; echo "Rp." . number_format($w['h_pengajuan'], 0, ',', '.'); echo"</div>
+    </div>
+
+    <div class='tablediv-row header'>
+   <div class='tablediv-cell'>Total Harga = "; echo "Rp." . number_format($w['total'], 0, ',', '.'); echo"</div>
+    </div>
+    
+    <!-- Tambahkan baris baru (tablediv-row) jika diperlukan -->
+</div>   
+          ";
+        
+        $tebaru2 = mysqli_query($koneksi, "SELECT bangsal.nm_bangsal, gudangbarang.kode_brng, gudangbarang.kd_bangsal, SUM(gudangbarang.stok) AS total_stok
+                    FROM gudangbarang, bangsal 
+                    WHERE gudangbarang.kd_bangsal = bangsal.kd_bangsal 
+                    AND kode_brng='$w[kode_brng]' 
+                    GROUP BY kode_brng, kd_bangsal");
+        while ($row = mysqli_fetch_array($tebaru2)) {
+          echo "<div class='tablediv-row'>
+          <div class='tablediv-cell'><i class='fa fa-pencil margin-r-5'></i> STOK</strong> $row[nm_bangsal] = $row[total_stok]</div>
+      </div>";
+        }
+       echo" 
+      </div><!-- /.box-body -->
+      <!-- Modal -->
+<div class='modal fade' id='$w[kode_brng]$w[no_pengajuan]' tabindex='-1' role='dialog' aria-labelledby='exampleModalCenterTitle' aria-hidden='true'>
+  <div class='modal-dialog modal-dialog-centered' role='document'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <h5 class='modal-title' id='exampleModalLongTitle'>$no . $w[nama_brng] ($w[kode_satbesar])</h5>
+        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+          <span aria-hidden='true'>&times;</span>
+        </button>
+      </div>
+      <div class='modal-body'>
+      <form id='form1'  method='post' action='edit.php?aksi=proseseditpengajuan&no_pengajuan=$w[no_pengajuan]&kode_brng=$w[kode_brng]'>
+      <div class='form-grup'>
+       <label>Jumlah $w[nama_brng] ($w[kode_satbesar]) </label>
+       <input type='text' class='form-control' value='$w[jumlah]' name='jumlah'/><br>
+       <button type='submit' class='btn btn-primary'>Save </button>
+      </div> 
+     </form>
+      </div>
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
+        <button type='button' class='btn btn-primary'>Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+     ";
+      }
+      
+      echo"
+    </div></a><!-- /.box -->
+  </div><!-- /.col -->
+  <div class='col-md-12'>
+    <div class='nav-tabs-custom'>
+    <a href='#' class='btn btn-primary'>"; echo "Subtotal : Rp." . number_format($tt , 0, ',', '.');  echo"</a>
+    </div><!-- /.nav-tabs-custom -->
+  </div><!-- /.col -->
+</div><!-- /.row -->
+";    
+}
+elseif ($_GET['aksi'] == 'proseseditpengajuan') {
+  $tebaru = mysqli_query($koneksi, "SELECT * FROM detail_pengajuan_barang_medis,databarang  WHERE 
+  detail_pengajuan_barang_medis.kode_brng = databarang.kode_brng 
+  AND detail_pengajuan_barang_medis.kode_brng = '$_GET[kode_brng]' AND detail_pengajuan_barang_medis.no_pengajuan = '$_GET[no_pengajuan]'"); 
+  $t=mysqli_fetch_array($tebaru);
+ echo"<div class='box box-default'>
+ <div class='box-header with-border'>
+ <h3 class='box-title'>Cari Data</h3>
+ <div class='box-tools pull-right'>
+     <button class='btn btn-box-tool' data-widget='collapse'><i class='fa fa-minus'></i></button>
+     <button class='btn btn-box-tool' data-widget='remove'><i class='fa fa-remove'></i></button>
+ </div>
+ </div><!-- /.box-header -->
+ <div class='box-body'>
+ <div class='row'>
+ <form id='form1'  method='post' action='edit.php?aksi=proseseditpengajuan&no_pengajuan=$t[no_pengajuan]&kode_brng=$t[kode_brng]'>
+ <div class='form-grup'>
+  <label>Jumlah $t[kode_brng] $t[no_pengajuan] </label>
+  <input type='text' class='form-control' value='$t[jumlah]' name='jumlah'/><br>
+  <button type='submit' class='btn btn-primary'>Save </button>
+ </div> 
+</form>
+ </div><!-- /.row -->
+ </div><!-- /.box-body -->
+
+ </div><!-- /.box --> ";
+
+}
+elseif ($_GET['aksi'] == 'tampildata') {
     echo"<div class='box box-default'>
     <div class='box-header with-border'>
     <h3 class='box-title'>Cari Data</h3>
