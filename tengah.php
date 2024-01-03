@@ -101,6 +101,43 @@ if($_GET['aksi']=='index'){
  <!-- /.col -->
 </div>
 <!-- /.row -->"; 
+echo"<div class='box box-default'>
+<div class='box-header with-border'>
+<h3 class='box-title'>Cari Data</h3>
+<div class='box-tools pull-right'>
+    <button class='btn btn-box-tool' data-widget='collapse'><i class='fa fa-minus'></i></button>
+    <button class='btn btn-box-tool' data-widget='remove'><i class='fa fa-remove'></i></button>
+</div>
+</div><!-- /.box-header -->
+<div class='box-body'>
+<form  action='proses.php?aksi=grafik' method='post'> 
+<div class='row'>
+    <div class='col-md-4'>
+    <div class='form-group'>
+        <label>Pilih tahun</label>
+        <select class='form-control select2' name='tahun' style='width: 100%;'>";
+        $start_year = date("Y") - 10; // Mengurangi 10 tahun dari tahun saat ini
+        $end_year = date("Y"); // Tahun saat ini
+        for ($year = $start_year; $year <= $end_year; $year++) {
+          echo "<option value='$year'>$year</option>";
+        }
+        echo"
+      </select>
+    </div><!-- /.form-group -->
+    </div><!-- /.col -->
+
+    <div class='col-md-4'>
+    <div class='form-group'>
+</br>
+    <input type='submit' class='btn btn-info' value='Tampilkan Data'>
+    </div><!-- /.form-group -->
+    
+</div><!-- /.col -->
+</div><!-- /.row -->
+</form>
+</div><!-- /.box-body -->
+
+</div><!-- /.box --> ";
 include "grafik.php";
 }
 elseif($_GET['aksi']=='pengajuanobat'){
@@ -301,7 +338,44 @@ elseif($_GET['aksi']=='pengajuanobat'){
                         </div>";
 }
 elseif($_GET['aksi']=='grafik'){
-include "grafik.php";
+  echo"<div class='box box-default'>
+  <div class='box-header with-border'>
+  <h3 class='box-title'>Cari Data</h3>
+  <div class='box-tools pull-right'>
+      <button class='btn btn-box-tool' data-widget='collapse'><i class='fa fa-minus'></i></button>
+      <button class='btn btn-box-tool' data-widget='remove'><i class='fa fa-remove'></i></button>
+  </div>
+  </div><!-- /.box-header -->
+  <div class='box-body'>
+  <form  action='proses.php?aksi=grafik' method='post'> 
+  <div class='row'>
+      <div class='col-md-4'>
+      <div class='form-group'>
+          <label>Pilih tahun</label>
+          <select class='form-control select2' name='tahun' style='width: 100%;'>";
+          $start_year = date("Y") - 10; // Mengurangi 10 tahun dari tahun saat ini
+          $end_year = date("Y"); // Tahun saat ini
+          for ($year = $start_year; $year <= $end_year; $year++) {
+            echo "<option value='$year'>$year</option>";
+          }
+          echo"
+        </select>
+      </div><!-- /.form-group -->
+      </div><!-- /.col -->
+  
+      <div class='col-md-4'>
+      <div class='form-group'>
+  </br>
+      <input type='submit' class='btn btn-info' value='Tampilkan Data'>
+      </div><!-- /.form-group -->
+      
+  </div><!-- /.col -->
+  </div><!-- /.row -->
+  </form>
+  </div><!-- /.box-body -->
+  
+  </div><!-- /.box --> ";
+include "tahungrafik.php";
 }
 elseif($_GET['aksi']=='pemesanan'){
     echo"
