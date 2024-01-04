@@ -20,3 +20,11 @@ elseif($_GET['aksi']=='setujuipengajuan'){
 	mysqli_query($koneksi,"UPDATE pengajuan_barang_medis SET status='Proses Pengajuan' WHERE no_pengajuan='$_GET[no_pengajuan]'");
 	echo "<script>window.alert('Berhasil verikasi data $_GET[no_pengajuan]'); window.location=('proses.php?aksi=editdetailpemesanan&no_pengajuan=$_GET[no_pengajuan]')</script>";
 }
+elseif($_GET['aksi']=='setujuiprosespengajuan'){
+	mysqli_query($koneksi,"UPDATE pengajuan_barang_medis SET status='Pengajuan' WHERE no_pengajuan='$_GET[no_pengajuan]'");
+	echo "<script>window.alert('Berhasil verikasi data $_GET[no_pengajuan]'); window.location=('proses.php?aksi=editdetailpemesanan&no_pengajuan=$_GET[no_pengajuan]')</script>";
+}
+elseif($_GET['aksi']=='hapusobatpengajuan'){
+	mysqli_query($koneksi,"DELETE FROM detail_pengajuan_barang_medis WHERE no_pengajuan='$_GET[no_pengajuan]' AND kode_brng='$_GET[kode_brng]'");
+	echo "<script>window.alert('Berhasil hapus data obat  $_GET[kode_brng] dan $_GET[no_pengajuan]'); window.location=('proses.php?aksi=editdetailpemesanan&no_pengajuan=$_GET[no_pengajuan]')</script>";
+}

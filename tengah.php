@@ -140,6 +140,49 @@ echo"<div class='box box-default'>
 </div><!-- /.box --> ";
 include "grafik.php";
 }
+elseif($_GET['aksi']=='ikon'){
+  include "ikon.php"; 
+}
+elseif($_GET['aksi']=='grafik'){
+  echo"<div class='box box-default'>
+  <div class='box-header with-border'>
+  <h3 class='box-title'>Cari Data</h3>
+  <div class='box-tools pull-right'>
+      <button class='btn btn-box-tool' data-widget='collapse'><i class='fa fa-minus'></i></button>
+      <button class='btn btn-box-tool' data-widget='remove'><i class='fa fa-remove'></i></button>
+  </div>
+  </div><!-- /.box-header -->
+  <div class='box-body'>
+  <form  action='proses.php?aksi=grafik' method='post'> 
+  <div class='row'>
+      <div class='col-md-4'>
+      <div class='form-group'>
+          <label>Pilih tahun</label>
+          <select class='form-control select2' name='tahun' style='width: 100%;'>";
+          $start_year = date("Y") - 10; // Mengurangi 10 tahun dari tahun saat ini
+          $end_year = date("Y"); // Tahun saat ini
+          for ($year = $start_year; $year <= $end_year; $year++) {
+            echo "<option value='$year'>$year</option>";
+          }
+          echo"
+        </select>
+      </div><!-- /.form-group -->
+      </div><!-- /.col -->
+  
+      <div class='col-md-4'>
+      <div class='form-group'>
+  </br>
+      <input type='submit' class='btn btn-info' value='Tampilkan Data'>
+      </div><!-- /.form-group -->
+      
+  </div><!-- /.col -->
+  </div><!-- /.row -->
+  </form>
+  </div><!-- /.box-body -->
+  
+  </div><!-- /.box --> ";
+include "tahungrafik.php";
+}
 elseif($_GET['aksi']=='pengajuanobat'){
     echo"<div class='box box-default'>
     <div class='box-header with-border'>
@@ -190,12 +233,9 @@ elseif($_GET['aksi']=='pengajuanobat'){
                             
                             <div class='panel-body'>
                                <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=pengajuan'>Pengajuan</a>
-                               <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=Proses Pengajuan'>Proses Pengajuan</a>
-                               <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=Disetujui'>Di Setujui</a>
-                               <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=Ditolak' >Di Tolak</a> <br> <br>
-                              
-                              
-                           
+                               <a class='btn btn-warning' href='proses.php?aksi=prosespemesanan&p=Proses Pengajuan'>Proses Pengajuan</a>
+                               <a class='btn btn-success' href='proses.php?aksi=prosespemesanan&p=Disetujui'>Di Setujui</a>
+                               <a class='btn btn-danger' href='proses.php?aksi=prosespemesanan&p=Ditolak' >Di Tolak</a> <br> <br>
                                 <div class='tab-content'>
                                         <h4>Data Proses Pengadaan Gudang Obat $k_k[nama_instansi] </h4>
                                        
@@ -338,46 +378,7 @@ elseif($_GET['aksi']=='pengajuanobat'){
                         <button class='btn btn-danger btn-lg'> "; echo "Subtotal : Rp." . number_format($subtotal , 0, ',', '.');  echo" </button>
                         </div>";
 }
-elseif($_GET['aksi']=='grafik'){
-  echo"<div class='box box-default'>
-  <div class='box-header with-border'>
-  <h3 class='box-title'>Cari Data</h3>
-  <div class='box-tools pull-right'>
-      <button class='btn btn-box-tool' data-widget='collapse'><i class='fa fa-minus'></i></button>
-      <button class='btn btn-box-tool' data-widget='remove'><i class='fa fa-remove'></i></button>
-  </div>
-  </div><!-- /.box-header -->
-  <div class='box-body'>
-  <form  action='proses.php?aksi=grafik' method='post'> 
-  <div class='row'>
-      <div class='col-md-4'>
-      <div class='form-group'>
-          <label>Pilih tahun</label>
-          <select class='form-control select2' name='tahun' style='width: 100%;'>";
-          $start_year = date("Y") - 10; // Mengurangi 10 tahun dari tahun saat ini
-          $end_year = date("Y"); // Tahun saat ini
-          for ($year = $start_year; $year <= $end_year; $year++) {
-            echo "<option value='$year'>$year</option>";
-          }
-          echo"
-        </select>
-      </div><!-- /.form-group -->
-      </div><!-- /.col -->
-  
-      <div class='col-md-4'>
-      <div class='form-group'>
-  </br>
-      <input type='submit' class='btn btn-info' value='Tampilkan Data'>
-      </div><!-- /.form-group -->
-      
-  </div><!-- /.col -->
-  </div><!-- /.row -->
-  </form>
-  </div><!-- /.box-body -->
-  
-  </div><!-- /.box --> ";
-include "tahungrafik.php";
-}
+
 elseif($_GET['aksi']=='pemesanan'){
     echo"
     <div class='col-lg-12'>
@@ -646,9 +647,9 @@ elseif($_GET['aksi']=='prosespemesanan'){
     <div class='row'>
     <div class='panel-body'>
     <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=pengajuan'>Pengajuan</a>
-    <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=Proses Pengajuan'>Proses Pengajuan</a>
-    <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=Disetujui'>Di Setujui</a>
-    <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=Ditolak' >Di Tolak</a> <br> <br>
+    <a class='btn btn-warning' href='proses.php?aksi=prosespemesanan&p=Proses Pengajuan'>Proses Pengajuan</a>
+    <a class='btn btn-success' href='proses.php?aksi=prosespemesanan&p=Disetujui'>Di Setujui</a>
+    <a class='btn btn-danger' href='proses.php?aksi=prosespemesanan&p=Ditolak' >Di Tolak</a> <br> <br>
      <div class='tab-content'>
              <h4>Data Proses Pengadaan Gudang Obat $k_k[nama_instansi] </h4> 
 <div class='panel-body'>
@@ -888,8 +889,15 @@ elseif ($_GET['aksi'] == 'editdetailpemesanan') {
       <div class='box-body box-profile'>
         <h3 class='profile-username text-center'>$t[nama]</h3>
         <p class='text-muted text-center'>$t[no_pengajuan]</p>
-        <a href='proses.php?aksi=pengajuanobat' class='btn btn-primary'>Kembali</a>
-       <a href='edit.php?aksi=setujuipengajuan&no_pengajuan=$t[no_pengajuan]' onclick=\"return confirm ('Apakah yakin ingin Mengjukan Pengadaan obat Ke bagian Keuangan dengan nomor $t[no_pengajuan] ?')\" class='btn btn-primary'>$t[status]</a> 
+        <a href='proses.php?aksi=pengajuanobat' class='btn btn-primary'>Kembali</a>";
+        if($t['status']=='Pengajuan'){
+          echo" <a class='btn btn-primary' href='edit.php?aksi=setujuipengajuan&no_pengajuan=$t[no_pengajuan]' onclick=\"return confirm ('Apakah yakin ingin Mengajukan Pengajuan obat Ke bagian Keuangan dengan nomor $t[no_pengajuan] ?')\" >AJUKAN</a>";
+         } else if($t['status']=='Proses Pengajuan'){
+          echo" <a class='btn btn-danger' href='edit.php?aksi=setujuiprosespengajuan&no_pengajuan=$t[no_pengajuan]' onclick=\"return confirm ('Apakah yakin ingin Membatalkan Pengadaan obat Ke bagian Keuangan dengan nomor $t[no_pengajuan] ?')\" >BATALKAN</a>"; 
+         }  else {
+          echo" <a class='btn btn-info' href='proses.php?aksi=prosespemesanan&p=$t[status]'></a>";
+        }
+       echo" 
       </div><!-- /.box-body -->
     </div><!-- /.box -->
 
@@ -908,7 +916,7 @@ elseif ($_GET['aksi'] == 'editdetailpemesanan') {
          
           <!-- Button trigger modal -->
           <button type='button' class='btn btn-info btn-sm' data-toggle='modal' data-target='#$w[kode_brng]$w[no_pengajuan]'>edit</button>
-          <a href='#' class='btn btn-danger btn-sm' >hapus</a>
+          <a href='edit.php?aksi=hapusobatpengajuan&no_pengajuan=$w[no_pengajuan]&kode_brng=$w[kode_brng]' class='btn btn-danger btn-sm' onclick=\"return confirm ('Apakah yakin ingin mengahapus Pengajuan Detail obat $w[nama_brng] ?')\" >hapus</a>
           </strong>
           
        
@@ -958,13 +966,12 @@ elseif ($_GET['aksi'] == 'editdetailpemesanan') {
       <div class='form-grup'>
        <label>Jumlah $w[nama_brng] ($w[kode_satbesar]) </label>
        <input type='text' class='form-control' value='$w[jumlah]' name='jumlah'/><br>
-       <button type='submit' class='btn btn-primary'>Save </button>
+       <button type='submit' class='btn btn-info'>Save </button>
       </div> 
      </form>
       </div>
       <div class='modal-footer'>
         <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
-        <button type='button' class='btn btn-primary'>Save changes</button>
       </div>
     </div>
   </div>
