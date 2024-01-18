@@ -251,6 +251,7 @@ elseif($_GET['aksi']=='pengajuanobat'){
                                                 <th>Pegawai</th>
                                                 <th>Tanggal</th>
                                                 <th>Status</th>
+                                                <th>aksi</th>
                                             </tr>
                                         </thead>
                         ";
@@ -268,7 +269,7 @@ elseif($_GET['aksi']=='pengajuanobat'){
                                                 <td>$t[nama]</td>
                                                 <td>$tgl_indo</td>
                                                 <td><a class='btn btn-info' href='proses.php?aksi=detailpemesanan&no_pengajuan=$t[no_pengajuan]'>$t[status]</a></td>
-                       
+                                                <td><a class='btn btn-danger' href='edit.php?aksi=hapustotalpengajuan&no_pengajuan=$t[no_pengajuan]' onclick=\"return confirm ('Apakah yakin ingin menghapus $t[no_pengajuan] ?')\">hapus</a></td>
                                             </tr>";
                                             ///MODEL VIEW
                                            
@@ -291,6 +292,7 @@ elseif($_GET['aksi']=='pengajuanobat'){
                                           <button type='button' class='btn btn-primary' data-dismiss='modal'>Close</button>
                                           <button type='button' class='btn btn-primary' data-dismiss='modal'>$t[status]</button>
                                           <a class='btn btn-info' href='proses.php?aksi=editdetailpemesanan&no_pengajuan=$t[no_pengajuan]'>Verifikasi</a>
+                                          <a class='btn btn-danger' href='edit.php?aksi=hapustotalpengajuan&no_pengajuan=$t[no_pengajuan]' onclick=\"return confirm ('Apakah yakin ingin menghapus $t[no_pengajuan] ?')\" >Hapus</a>
                                         </div><!-- /.box-body -->
                                       </div><!-- /.box -->
                                 

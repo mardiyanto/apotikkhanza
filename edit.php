@@ -28,3 +28,7 @@ elseif($_GET['aksi']=='hapusobatpengajuan'){
 	mysqli_query($koneksi,"DELETE FROM detail_pengajuan_barang_medis WHERE no_pengajuan='$_GET[no_pengajuan]' AND kode_brng='$_GET[kode_brng]'");
 	echo "<script>window.alert('Berhasil hapus data obat  $_GET[kode_brng] dan $_GET[no_pengajuan]'); window.location=('proses.php?aksi=editdetailpemesanan&no_pengajuan=$_GET[no_pengajuan]')</script>";
 }
+elseif($_GET['aksi']=='hapustotalpengajuan'){
+  mysqli_query($koneksi,"DELETE FROM pengajuan_barang_medis WHERE no_pengajuan='$_GET[no_pengajuan]'");
+	echo "<script>window.alert('Berhasil hapus data obat  $_GET[no_pengajuan]'); window.location=('proses.php?aksi=pengajuanobat')</script>";
+}
